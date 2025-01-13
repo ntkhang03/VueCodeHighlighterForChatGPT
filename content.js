@@ -1,11 +1,23 @@
 chrome.storage.local.get("sites", (data) => {
-  injectHighlightJS();
+  const sites = data.sites || [];
+  if (sites.includes(window.location.hostname)) {
+    injectHighlightJS();
+  }
 });
 
 // get message from popup.js
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === "toggleHighlight") {
-    window.postMessage(message, "*");
+    if (message.enabled) {
+      await injectHighlightJS();
+    }
+    window.postMessage(
+      {
+        ...message,
+        extensionId: chrome.runtime.id
+      },
+      "*"
+    );
   }
 });
 

@@ -14,10 +14,29 @@
       } else {
         localStorage.removeItem("enabled-highlight");
         observer?.disconnect();
+        const { extensionId } = event.data;
+        document
+          .querySelectorAll('script[src*="' + extensionId + '"]')
+          .forEach((element) => {
+            element.remove();
+          });
+        document
+          .querySelectorAll('link[href*="' + extensionId + '"]')
+          .forEach((element) => {
+            element.remove();
+          });
+
+        // find el class = "language-xml vue-code-highlighter"
+        document
+          .querySelectorAll(".language-xml.vue-code-highlighter")
+          .forEach((element) => {
+            element.classList.remove("language-xml");
+            element.classList.remove("vue-code-highlighter");
+            element.classList.add("language-vue");
+          });
       }
     } else if (event.data.type === "checkAndHighlight") {
       if (localStorage.getItem("enabled-highlight")) {
-        console.log("checkAndHighlight");
         highlightAllVueCode();
         observeDOMChanges();
       }
@@ -40,6 +59,7 @@
       // replace class to language-xml
       element.classList.remove("language-vue");
       element.classList.add("language-xml");
+      element.classList.add("vue-code-highlighter");
       hljs.highlightElement(element);
     });
   }
