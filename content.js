@@ -25,7 +25,7 @@ async function injectHighlightJS() {
   await injectScript(chrome.runtime.getURL("assets/js/inject.js"));
   await injectScript(chrome.runtime.getURL("assets/css/default.min.css"));
   await injectScript(chrome.runtime.getURL("assets/js/highlight.min.js"));
-  await injectScript(chrome.runtime.getURL("assets/js/xml.min.js"));
+  await injectScript(chrome.runtime.getURL("assets/js/vue.min.js"));
   window.postMessage({ type: "checkAndHighlight" }, "*");
 }
 

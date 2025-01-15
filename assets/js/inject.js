@@ -44,8 +44,9 @@
   });
 
   function highlightAllVueCode() {
-    hljs.highlightAll();
-    document.querySelectorAll(".language-vue").forEach((element) => {
+    // find el class = "hljs language-vue"
+    document.querySelectorAll(".hljs.language-vue").forEach((element) => {
+      console.log("highlightAllVueCode", element);
       // Method 1: wrap element with pre
       // if parent element is not pre, wrap it with pre
       // if (element.parentElement.tagName !== "PRE") {
@@ -57,16 +58,20 @@
 
       // Method 2: replace class to language-xml
       // replace class to language-xml
-      element.classList.remove("language-vue");
-      element.classList.add("language-xml");
+      // remove dataset data-highlighted="yes"
+      element.removeAttribute("data-highlighted");
       element.classList.add("vue-code-highlighter");
       hljs.highlightElement(element);
     });
   }
 
   function observeDOMChanges() {
-    observer = new MutationObserver(() => {
-      highlightAllVueCode();
+    observer = new MutationObserver((mutationsList) => {
+      mutationsList.forEach((mutation) => {
+        if (!mutation.target.closest(".hljs.vue-code-highlighter")) {
+          highlightAllVueCode();
+        }
+      });
     });
 
     observer.observe(document.body, {
