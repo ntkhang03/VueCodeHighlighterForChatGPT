@@ -33,10 +33,12 @@
     const currentHighlightingId = String(Date.now());
     highlightingId = currentHighlightingId;
 
-    const elements = document.querySelectorAll(".hljs.language-vue");
+    const elements = document.querySelectorAll(".language-vue");
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
-      if (highlightingId !== currentHighlightingId) return;
+      if (highlightingId !== currentHighlightingId) {
+        return;
+      }
       element.removeAttribute("data-highlighted"); // Đánh dấu chưa xử lý
       element.classList.add("vue-code-highlighter");
       // element.textContent = element.textContent;
@@ -55,7 +57,7 @@
       for (let mutation of mutationsList) {
         if (mutation.type === "childList" || mutation.type === "attributes") {
           mutation.target
-            .querySelectorAll(".hljs.language-vue")
+            .querySelectorAll(".language-vue")
             .forEach(() => highlightAllVueCode());
         }
       }
